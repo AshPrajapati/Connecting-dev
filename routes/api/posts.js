@@ -23,6 +23,7 @@ router.post(
     try {
       const user = await User.findById(req.user.id).select('-password');
 
+      //Create object of newPost
       const newPost = new Post({
         text: req.body.text,
         name: user.name,
@@ -30,6 +31,7 @@ router.post(
         user: req.user.id
       });
 
+      //Save in the DataBase
       const post = await newPost.save();
 
       res.json(post);
@@ -45,7 +47,7 @@ router.post(
 // @access   Private
 router.get('/', auth, async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    const posts = await Post.find().sort({ date: -1 });//sort:new to old post
     res.json(posts);
   } catch (err) {
     console.error(err.message);
@@ -58,9 +60,9 @@ router.get('/', auth, async (req, res) => {
 // @access   Private
 router.get('/:id', auth, checkObjectId('id'), async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id);//get id from the :id
 
-    if (!post) {
+    if (!post) {//if post not exist
       return res.status(404).json({ msg: 'Post not found' });
     }
 
@@ -97,6 +99,7 @@ router.delete('/:id', [auth, checkObjectId('id')], async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
 
 // @route    PUT api/posts/like/:id
 // @desc     Like a post

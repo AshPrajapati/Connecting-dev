@@ -6,6 +6,8 @@ import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
+
+  //formData object
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,6 +29,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     }
   };
 
+  //if user is Authenticated
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
@@ -88,7 +91,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,//PropTypes function isRequired
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 };

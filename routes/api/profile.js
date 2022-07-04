@@ -154,9 +154,9 @@ router.delete('/', auth, async (req, res) => {
     // Remove profile
     // Remove user
     await Promise.all([
-      Post.deleteMany({ user: req.user.id }),
-      Profile.findOneAndRemove({ user: req.user.id }),
-      User.findOneAndRemove({ _id: req.user.id })
+      Post.deleteMany({ user: req.user.id }),//delete post
+      Profile.findOneAndRemove({ user: req.user.id }),//delete profile
+      User.findOneAndRemove({ _id: req.user.id })//delete user as well
     ]);
 
     res.json({ msg: 'User deleted' });
@@ -186,7 +186,7 @@ router.put(
     try {
       const profile = await Profile.findOne({ user: req.user.id });
 
-      profile.experience.unshift(req.body);
+      profile.experience.unshift(req.body);//adding profile to first of experience array
 
       await profile.save();
 
@@ -204,7 +204,7 @@ router.put(
 
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
-    const foundProfile = await Profile.findOne({ user: req.user.id });
+    const foundProfile = await Profile.findOne({ user: req.user.id });//get profile
 
     foundProfile.experience = foundProfile.experience.filter(
       (exp) => exp._id.toString() !== req.params.exp_id
@@ -275,7 +275,7 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 router.get('/github/:username', async (req, res) => {
   try {
     const uri = encodeURI(
-      `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+      `https://api.github.com/users/${req.params.username}/repos?per_page=10&sort=created:asc`
     );
     const headers = {
       'user-agent': 'node.js',
